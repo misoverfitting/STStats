@@ -80,7 +80,7 @@ export default function App() {
       </nav>
 
       <main className="main-content">
-        <CollapsibleSection title="Overview">
+        <CollapsibleSection title="Overview" defaultOpen={false}>
           <div className="stat-cards">
             {statCards.map(s => (
               <StatCard key={s.label} label={s.label} value={s.value} color={s.color} />
@@ -88,7 +88,7 @@ export default function App() {
           </div>
         </CollapsibleSection>
 
-        <CollapsibleSection title="Charts">
+        <CollapsibleSection title="Charts" defaultOpen={false}>
           <div className="charts-row-inner">
             <div className="chart-half">
               <h3 className="section-sub-title">Character Win Rates</h3>
@@ -107,6 +107,7 @@ export default function App() {
         <CollapsibleSection
           title="Boss Encounters"
           subtitle=" — sorted by win rate"
+          defaultOpen={false}
         >
           <BossChart data={bossStats} />
         </CollapsibleSection>
@@ -114,6 +115,7 @@ export default function App() {
         <CollapsibleSection
           title="Card Picks"
           subtitle={char ? ` — ${char.name} only` : ''}
+          defaultOpen={false}
         >
           <CardPicks cards={cardStats} selectedChar={selected} />
         </CollapsibleSection>
@@ -121,6 +123,7 @@ export default function App() {
         <CollapsibleSection
           title="Recent Runs"
           subtitle={char ? ` — ${char.name} only` : ''}
+          defaultOpen={false}
         >
           <RunTable runs={filteredRuns} />
         </CollapsibleSection>
