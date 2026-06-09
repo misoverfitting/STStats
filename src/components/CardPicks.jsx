@@ -1,9 +1,10 @@
 import { useState, useMemo } from 'react';
+import { CARD_TYPES, TYPE_ORDER, TYPE_LABELS } from '../data/cardTypes';
 
 const SORT_OPTIONS = [
-  { id: 'pickRate',      label: 'Pick Rate'      },
-  { id: 'offered',       label: 'Most Offered'   },
-  { id: 'pickRateAsc',   label: 'Most Skipped'   },
+  { id: 'pickRate',    label: 'Pick Rate'    },
+  { id: 'offered',    label: 'Most Offered' },
+  { id: 'pickRateAsc', label: 'Most Skipped' },
 ];
 
 const SOURCE_OPTIONS = [
@@ -11,6 +12,15 @@ const SOURCE_OPTIONS = [
   { id: 'reward', label: 'Reward' },
   { id: 'shop',   label: 'Shop'   },
 ];
+
+const TYPE_COLORS = {
+  attack: 'var(--loss)',
+  skill:  'var(--silent)',
+  power:  'var(--necrobinder)',
+  curse:  'var(--text-faint)',
+  status: 'var(--text-faint)',
+  unknown: 'var(--text-faint)',
+};
 
 function pickRateForSource(card, source) {
   if (source === 'reward') return { rate: card.rewardPickRate, offered: card.rewardOffered };
@@ -26,38 +36,49 @@ function MiniBar({ rate, color = 'var(--gold)' }) {
   );
 }
 
+function TypeBadge({ type }) {
+  const label = TYPE_LABELS[type] ?? '?';
+  const color = TYPE_COLORS[type] ?? 'var(--text-faint)';
+  return (
+    <span className="type-badge" style={{ color, borderColor: color }}>
+      {label}
+    </span>
+  );
+}
+
 export default function CardPicks({ cards, selectedChar }) {
   const [sort,   setSort]   = useState('pickRate');
   const [source, setSource] = useState('all');
+  const [type,   setType]   = useState('all');
   const [limit,  setLimit]  = useState(30);
 
   const filtered = useMemo(() => {
     let list = cards;
 
-    // Filter by character if one is selected
     if (selectedChar !== 'all') {
       list = list.filter(c => c.byChar?.[selectedChar]?.offered >= 3);
     }
-
-    // Filter by source — drop cards with 0 offers in that source
     if (source === 'reward') list = list.filter(c => c.rewardOffered > 0);
     if (source === 'shop')   list = list.filter(c => c.shopOffered   > 0);
+    if (type !== 'all') {
+      list = list.filter(c => (CARD_TYPES[c.id] ?? 'unknown') === type);
+    }
 
-    // Sort
     return [...list].sort((a, b) => {
       const ra = pickRateForSource(a, source).rate;
       const rb = pickRateForSource(b, source).rate;
-      if (sort === 'offered')    return (pickRateForSource(b, source).offered) - (pickRateForSource(a, source).offered);
+      if (sort === 'offered')     return pickRateForSource(b, source).offered - pickRateForSource(a, source).offered;
       if (sort === 'pickRateAsc') return ra - rb;
       return rb - ra;
     });
-  }, [cards, selectedChar, source, sort]);
+  }, [cards, selectedChar, source, sort, type]);
 
   const shown = filtered.slice(0, limit);
 
+  const typeOptions = ['all', ...TYPE_ORDER];
+
   return (
     <div>
-      {/* Controls */}
       <div className="card-picks-controls">
         <div className="picks-control-group">
           <span className="picks-control-label">Sort</span>
@@ -83,15 +104,27 @@ export default function CardPicks({ cards, selectedChar }) {
             </button>
           ))}
         </div>
+        <div className="picks-control-group">
+          <span className="picks-control-label">Type</span>
+          {typeOptions.map(t => (
+            <button
+              key={t}
+              className={`picks-pill ${type === t ? 'active' : ''}`}
+              onClick={() => { setType(t); setLimit(30); }}
+            >
+              {t === 'all' ? 'All' : TYPE_LABELS[t]}
+            </button>
+          ))}
+        </div>
         <span className="picks-count">{filtered.length} cards</span>
       </div>
 
-      {/* Table */}
       <div className="table-wrapper">
         <table className="run-table card-picks-table">
           <thead>
             <tr>
-              <th style={{ width: 200 }}>Card</th>
+              <th style={{ width: 180 }}>Card</th>
+              <th style={{ width: 70 }}>Type</th>
               <th style={{ width: 60 }}>Offered</th>
               <th style={{ width: 60 }}>Picked</th>
               <th style={{ width: 80 }}>Pick %</th>
@@ -109,11 +142,13 @@ export default function CardPicks({ cards, selectedChar }) {
               const color = rate >= 70 ? 'var(--win)'
                           : rate >= 40 ? 'var(--gold)'
                           : 'var(--loss)';
+              const cardType = CARD_TYPES[card.id] ?? 'unknown';
               return (
                 <tr key={card.id}>
                   <td style={{ fontFamily: 'Cinzel, serif', fontSize: '0.82rem' }}>
                     {card.name}
                   </td>
+                  <td><TypeBadge type={cardType} /></td>
                   <td className="muted">{offered}</td>
                   <td className="muted">{picked}</td>
                   <td style={{ color, fontWeight: 600 }}>{rate}%</td>

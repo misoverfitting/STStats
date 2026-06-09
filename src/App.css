@@ -325,6 +325,75 @@ body {
   font-style: italic;
 }
 
+/* ── Collapsible Sections ──────────────────────────── */
+.collapsible-section {
+  padding: 0;
+  overflow: hidden;
+}
+
+.section-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  padding: 20px 24px 16px;
+  text-align: left;
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.18em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  margin-bottom: 0;
+  transition: color 0.15s;
+}
+
+.section-toggle:hover { color: var(--text); }
+.section-toggle:hover .collapse-icon { color: var(--gold); }
+
+.section-toggle-text { flex: 1; }
+
+.collapse-icon {
+  font-size: 0.6rem;
+  color: var(--text-faint);
+  margin-left: 12px;
+  transition: color 0.15s;
+}
+
+.section-body {
+  padding: 20px 24px 24px;
+}
+
+.charts-row-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.section-sub-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.15em;
+  color: var(--text-faint);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+/* ── Type Badge ────────────────────────────────────── */
+.type-badge {
+  font-family: 'Cinzel', serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  padding: 2px 7px;
+  border: 1px solid;
+  border-radius: 2px;
+  white-space: nowrap;
+  opacity: 0.85;
+}
+
 /* ── Card Picks ────────────────────────────────────── */
 .card-picks-controls {
   display: flex;
@@ -419,6 +488,6 @@ body {
 
 /* ── Responsive ────────────────────────────────────── */
 @media (max-width: 760px) {
-  .charts-row { grid-template-columns: 1fr; }
-  .app-title  { letter-spacing: 0.2em; }
+  .charts-row-inner { grid-template-columns: 1fr; }
+  .app-title        { letter-spacing: 0.2em; }
 }

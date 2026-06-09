@@ -13,6 +13,7 @@ import TrendChart from './components/TrendChart';
 import BossChart from './components/BossChart';
 import RunTable from './components/RunTable';
 import CardPicks from './components/CardPicks';
+import CollapsibleSection from './components/CollapsibleSection';
 
 const TABS = [
   { id: 'all',         label: 'All'         },
@@ -23,8 +24,7 @@ const TABS = [
   { id: 'regent',      label: 'Regent'      },
 ];
 
-const streakLabel = (n, type) =>
-  type === 'win' ? `${n}W` : `${n}L`;
+const streakLabel = (n, type) => type === 'win' ? `${n}W` : `${n}L`;
 
 export default function App() {
   const [selected, setSelected] = useState('all');
@@ -33,22 +33,22 @@ export default function App() {
 
   const statCards = char
     ? [
-        { label: 'Runs',              value: char.runs                          },
-        { label: 'Wins',              value: char.wins                          },
-        { label: 'Win Rate',          value: `${char.winRate}%`, color: char.color },
-        { label: 'Max Ascension',     value: `A${char.highestAscension}`        },
-        { label: 'Best Streak',       value: `${char.bestStreak}W`              },
-        { label: 'Fastest Win',       value: char.fastestWin                    },
-        { label: 'Playtime',          value: char.playtime                      },
+        { label: 'Runs',          value: char.runs                          },
+        { label: 'Wins',          value: char.wins                          },
+        { label: 'Win Rate',      value: `${char.winRate}%`, color: char.color },
+        { label: 'Max Ascension', value: `A${char.highestAscension}`        },
+        { label: 'Best Streak',   value: `${char.bestStreak}W`              },
+        { label: 'Fastest Win',   value: char.fastestWin                    },
+        { label: 'Playtime',      value: char.playtime                      },
       ]
     : [
-        { label: 'Total Runs',        value: overview.totalRuns                 },
-        { label: 'Total Wins',        value: overview.totalWins                 },
-        { label: 'Win Rate',          value: `${overview.winRate}%`             },
-        { label: 'Current Streak',    value: streakLabel(overview.currentStreak, overview.currentStreakType) },
-        { label: 'Best Streak',       value: `${overview.bestStreak}W`          },
-        { label: 'Floors Climbed',    value: overview.floorsClimbed.toLocaleString() },
-        { label: 'Total Playtime',    value: overview.totalPlaytime             },
+        { label: 'Total Runs',    value: overview.totalRuns                 },
+        { label: 'Total Wins',    value: overview.totalWins                 },
+        { label: 'Win Rate',      value: `${overview.winRate}%`             },
+        { label: 'Current Streak', value: streakLabel(overview.currentStreak, overview.currentStreakType) },
+        { label: 'Best Streak',   value: `${overview.bestStreak}W`          },
+        { label: 'Floors Climbed', value: overview.floorsClimbed.toLocaleString() },
+        { label: 'Total Playtime', value: overview.totalPlaytime            },
       ];
 
   const filteredRuns = selected === 'all'
@@ -80,49 +80,50 @@ export default function App() {
       </nav>
 
       <main className="main-content">
-        <section className="stat-cards">
-          {statCards.map(s => (
-            <StatCard key={s.label} label={s.label} value={s.value} color={s.color} />
-          ))}
-        </section>
-
-        <section className="charts-row">
-          <div className="chart-card">
-            <h2 className="section-title">Character Win Rates</h2>
-            <CharacterChart characters={characters} selected={selected} />
+        <CollapsibleSection title="Overview">
+          <div className="stat-cards">
+            {statCards.map(s => (
+              <StatCard key={s.label} label={s.label} value={s.value} color={s.color} />
+            ))}
           </div>
-          <div className="chart-card">
-            <h2 className="section-title">
-              Win Rate Trend
-              <span className="section-sub"> (10-run rolling avg)</span>
-            </h2>
-            <TrendChart data={winRateHistory} />
-          </div>
-        </section>
+        </CollapsibleSection>
 
-        <div className="chart-card chart-card-full">
-          <h2 className="section-title">
-            Boss Encounters
-            <span className="section-sub"> — sorted by win rate</span>
-          </h2>
+        <CollapsibleSection title="Charts">
+          <div className="charts-row-inner">
+            <div className="chart-half">
+              <h3 className="section-sub-title">Character Win Rates</h3>
+              <CharacterChart characters={characters} selected={selected} />
+            </div>
+            <div className="chart-half">
+              <h3 className="section-sub-title">
+                Win Rate Trend
+                <span className="section-sub"> (10-run rolling avg)</span>
+              </h3>
+              <TrendChart data={winRateHistory} />
+            </div>
+          </div>
+        </CollapsibleSection>
+
+        <CollapsibleSection
+          title="Boss Encounters"
+          subtitle=" — sorted by win rate"
+        >
           <BossChart data={bossStats} />
-        </div>
+        </CollapsibleSection>
 
-        <div className="chart-card chart-card-full">
-          <h2 className="section-title">
-            Card Picks
-            {char && <span className="section-sub"> — {char.name} only</span>}
-          </h2>
+        <CollapsibleSection
+          title="Card Picks"
+          subtitle={char ? ` — ${char.name} only` : ''}
+        >
           <CardPicks cards={cardStats} selectedChar={selected} />
-        </div>
+        </CollapsibleSection>
 
-        <div className="chart-card chart-card-full">
-          <h2 className="section-title">
-            Recent Runs
-            {char && <span className="section-sub"> — {char.name} only</span>}
-          </h2>
+        <CollapsibleSection
+          title="Recent Runs"
+          subtitle={char ? ` — ${char.name} only` : ''}
+        >
           <RunTable runs={filteredRuns} />
-        </div>
+        </CollapsibleSection>
       </main>
 
       <footer className="app-footer">
