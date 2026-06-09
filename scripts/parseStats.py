@@ -250,6 +250,96 @@ for i, r in enumerate(last_50):
         'date':            dt.strftime('%b %-d'),
     })
 
+# ── Card pick rates ──────────────────────────────────────────────────
+# node types: reward = combat drops; shop = merchant
+REWARD_NODE_TYPES = {'monster', 'elite', 'boss', 'treasure'}
+SHOP_NODE_TYPES   = {'shop'}
+
+def card_display_name(raw_id):
+    """'CARD.ROYAL_GAMBLE' → 'Royal Gamble'"""
+    return raw_id.replace('CARD.', '').replace('_', ' ').title()
+
+# card_pool[card_id][char_id][source] = [offered, picked]
+card_pool = {}
+
+for r in all_runs:
+    d   = r['_raw']
+    cid = r['char_key']
+    cfg = CHAR_CONFIG[cid]
+
+    # find user player index for this run
+    players = d.get('players', [])
+    if len(players) == 1:
+        user_idx = 0
+    else:
+        user_idx = next(
+            (i for i, p in enumerate(players) if p.get('id') == USER_STEAM_ID),
+            0
+        )
+
+    for act in d.get('map_point_history', []):
+        for node in act:
+            ntype = node.get('map_point_type', '')
+            if ntype in REWARD_NODE_TYPES:
+                src = 'reward'
+            elif ntype in SHOP_NODE_TYPES:
+                src = 'shop'
+            else:
+                continue
+
+            ps_list = node.get('player_stats', [])
+            ps = ps_list[user_idx] if user_idx < len(ps_list) else (ps_list[0] if ps_list else {})
+
+            for choice in ps.get('card_choices', []):
+                card_id = choice['card']['id']
+                picked  = choice.get('was_picked', False)
+
+                entry = card_pool.setdefault(card_id, {})
+                char_entry = entry.setdefault(cfg['id'], {'reward': [0, 0], 'shop': [0, 0]})
+                char_entry[src][0] += 1
+                if picked:
+                    char_entry[src][1] += 1
+
+# Flatten into a list, requiring at least 5 total offers
+MIN_OFFERS = 5
+card_stats_list = []
+for card_id, char_data in card_pool.items():
+    total_off = total_pk = rew_off = rew_pk = shop_off = shop_pk = 0
+    by_char = {}
+    for char_id, srcs in char_data.items():
+        r_off, r_pk = srcs['reward']
+        s_off, s_pk = srcs['shop']
+        off = r_off + s_off
+        pk  = r_pk  + s_pk
+        total_off += off;  total_pk  += pk
+        rew_off   += r_off; rew_pk   += r_pk
+        shop_off  += s_off; shop_pk  += s_pk
+        by_char[char_id] = {
+            'offered':    off,
+            'picked':     pk,
+            'pickRate':   round(pk / off * 100, 1) if off else 0,
+        }
+    if total_off < MIN_OFFERS:
+        continue
+    card_stats_list.append({
+        'id':              card_id.replace('CARD.', ''),
+        'name':            card_display_name(card_id),
+        'offered':         total_off,
+        'picked':          total_pk,
+        'pickRate':        round(total_pk / total_off * 100, 1),
+        'rewardOffered':   rew_off,
+        'rewardPicked':    rew_pk,
+        'rewardPickRate':  round(rew_pk / rew_off * 100, 1) if rew_off else 0,
+        'shopOffered':     shop_off,
+        'shopPicked':      shop_pk,
+        'shopPickRate':    round(shop_pk / shop_off * 100, 1) if shop_off else 0,
+        'byChar':          by_char,
+    })
+
+card_stats_list.sort(key=lambda c: (-c['offered'], -c['pickRate']))
+
+print(f'\nCard stats: {len(card_stats_list)} cards with {MIN_OFFERS}+ offers')
+
 # ── Ascension win rates (by ascension level 0-10) ────────────────────
 
 asc_buckets = {}
@@ -314,6 +404,7 @@ out_lines = [
     obj_arr('recentRuns', recent_runs),
     obj_arr('winRateHistory', win_rate_history),
     obj_arr('ascensionStats', ascension_stats),
+    obj_arr('cardStats', card_stats_list),
 ]
 
 output = '\n'.join(out_lines)

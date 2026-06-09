@@ -5,12 +5,14 @@ import {
   bossStats,
   recentRuns,
   winRateHistory,
+  cardStats,
 } from './data/playerStats';
 import StatCard from './components/StatCard';
 import CharacterChart from './components/CharacterChart';
 import TrendChart from './components/TrendChart';
 import BossChart from './components/BossChart';
 import RunTable from './components/RunTable';
+import CardPicks from './components/CardPicks';
 
 const TABS = [
   { id: 'all',         label: 'All'         },
@@ -104,6 +106,14 @@ export default function App() {
             <span className="section-sub"> — sorted by win rate</span>
           </h2>
           <BossChart data={bossStats} />
+        </div>
+
+        <div className="chart-card chart-card-full">
+          <h2 className="section-title">
+            Card Picks
+            {char && <span className="section-sub"> — {char.name} only</span>}
+          </h2>
+          <CardPicks cards={cardStats} selectedChar={selected} />
         </div>
 
         <div className="chart-card chart-card-full">

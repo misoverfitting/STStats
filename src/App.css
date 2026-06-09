@@ -325,6 +325,87 @@ body {
   font-style: italic;
 }
 
+/* ── Card Picks ────────────────────────────────────── */
+.card-picks-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px 24px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.picks-control-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.picks-control-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  color: var(--text-faint);
+  text-transform: uppercase;
+  margin-right: 4px;
+}
+
+.picks-pill {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  padding: 5px 14px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.15s;
+  border-radius: 2px;
+}
+
+.picks-pill:hover { border-color: var(--border-hi); color: var(--text); }
+.picks-pill.active { background: var(--bg-hover); border-color: var(--gold); color: var(--gold-hi); }
+
+.picks-count {
+  font-size: 0.78rem;
+  color: var(--text-faint);
+  margin-left: auto;
+  letter-spacing: 0.1em;
+}
+
+.card-picks-table td { font-size: 0.88rem; }
+
+.minibar-track {
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+  min-width: 80px;
+}
+
+.minibar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.load-more-btn {
+  width: 100%;
+  margin-top: 16px;
+  padding: 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.load-more-btn:hover { border-color: var(--border-hi); color: var(--text); }
+
 /* ── Footer ────────────────────────────────────────── */
 .app-footer {
   text-align: center;
