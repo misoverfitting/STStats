@@ -1,7 +1,6 @@
 import {
   AreaChart, Area, XAxis, YAxis, Tooltip, ReferenceLine, ResponsiveContainer,
 } from 'recharts';
-import { winRateHistory } from '../data/playerStats';
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null;
@@ -17,10 +16,10 @@ const CustomTooltip = ({ active, payload, label }) => {
   );
 };
 
-export default function TrendChart() {
+export default function TrendChart({ data }) {
   return (
     <ResponsiveContainer width="100%" height={220}>
-      <AreaChart data={winRateHistory} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
+      <AreaChart data={data} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
         <defs>
           <linearGradient id="trendGrad" x1="0" y1="0" x2="0" y2="1">
             <stop offset="5%"  stopColor="#c9a227" stopOpacity={0.35} />

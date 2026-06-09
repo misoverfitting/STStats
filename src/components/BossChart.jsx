@@ -2,18 +2,19 @@ import {
   BarChart, Bar, XAxis, YAxis, Tooltip, Cell, ResponsiveContainer,
 } from 'recharts';
 
+// STS2 act colours
 const ACT_COLORS = {
-  1: '#5c80c8',
-  2: '#c9a227',
-  3: '#d4825c',
-  4: '#8b2020',
+  overgrowth: '#5cbf7a',
+  underdocks: '#5c95d4',
+  hive:       '#c9a227',
+  glory:      '#d45c5c',
 };
 
 const ACT_LABELS = {
-  1: 'Act 1 — Exordium',
-  2: 'Act 2 — City',
-  3: 'Act 3 — Beyond',
-  4: 'Act 4 — Ending',
+  overgrowth: 'Act 1 — Overgrowth',
+  underdocks: 'Act 1 — Underdocks',
+  hive:       'Act 2 — The Hive',
+  glory:      'Act 3 — Glory',
 };
 
 const CustomTooltip = ({ active, payload }) => {
@@ -21,7 +22,7 @@ const CustomTooltip = ({ active, payload }) => {
   const d = payload[0].payload;
   return (
     <div className="chart-tooltip">
-      <p className="tooltip-title" style={{ color: ACT_COLORS[d.act] }}>{d.name}</p>
+      <p className="tooltip-title" style={{ color: ACT_COLORS[d.act] || '#c9a227' }}>{d.name}</p>
       <p className="tooltip-row">Win Rate <strong>{d.winRate}%</strong></p>
       <p className="tooltip-sub">{d.victories} / {d.encounters} encounters</p>
     </div>
@@ -54,7 +55,7 @@ export default function BossChart({ data }) {
           <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255,255,255,0.03)' }} />
           <Bar dataKey="winRate" radius={[0, 3, 3, 0]}>
             {sorted.map(b => (
-              <Cell key={b.name} fill={ACT_COLORS[b.act]} />
+              <Cell key={b.name} fill={ACT_COLORS[b.act] || '#888'} />
             ))}
           </Bar>
         </BarChart>
@@ -63,7 +64,7 @@ export default function BossChart({ data }) {
       <div className="boss-legend">
         {Object.entries(ACT_LABELS).map(([act, label]) => (
           <span key={act} className="legend-item">
-            <span className="legend-dot" style={{ background: ACT_COLORS[act] }} />
+            <span className="legend-dot" style={{ background: ACT_COLORS[act] || '#888' }} />
             {label}
           </span>
         ))}

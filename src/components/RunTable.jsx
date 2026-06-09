@@ -1,15 +1,17 @@
 const CHAR_COLORS = {
-  ironclad: '#d45c5c',
-  silent:   '#4db87a',
-  defect:   '#5c95d4',
-  watcher:  '#a05cd4',
+  ironclad:    '#d45c5c',
+  silent:      '#4db87a',
+  regent:      '#d4a827',
+  necrobinder: '#a05cd4',
+  defect:      '#5c95d4',
 };
 
 const CHAR_NAMES = {
-  ironclad: 'Ironclad',
-  silent:   'Silent',
-  defect:   'Defect',
-  watcher:  'Watcher',
+  ironclad:    'Ironclad',
+  silent:      'Silent',
+  regent:      'Regent',
+  necrobinder: 'Necrobinder',
+  defect:      'Defect',
 };
 
 export default function RunTable({ runs }) {
@@ -24,9 +26,11 @@ export default function RunTable({ runs }) {
           <tr>
             <th>Result</th>
             <th>Character</th>
-            <th>Ascension</th>
-            <th>Floor</th>
-            <th>Score</th>
+            <th>Asc</th>
+            <th>Act Reached</th>
+            <th>Killed By</th>
+            <th>Time</th>
+            <th>Mode</th>
             <th>Date</th>
           </tr>
         </thead>
@@ -39,11 +43,21 @@ export default function RunTable({ runs }) {
                 </span>
               </td>
               <td style={{ color: CHAR_COLORS[run.character] }}>
-                {CHAR_NAMES[run.character]}
+                {CHAR_NAMES[run.character] ?? run.character}
               </td>
               <td>A{run.ascension}</td>
-              <td className="muted">{run.floor}</td>
-              <td>{run.score.toLocaleString()}</td>
+              <td style={{ color: run.won ? 'var(--win)' : 'var(--text)' }}>
+                {run.actReached}
+              </td>
+              <td className="muted killed-by">
+                {run.killedBy || '—'}
+              </td>
+              <td className="muted">{run.runTime}</td>
+              <td className="muted">
+                {run.multiplayer ? (
+                  <span title={`With: ${run.allies.join(', ')}`} className="mp-badge">Co-op</span>
+                ) : 'Solo'}
+              </td>
               <td className="muted">{run.date}</td>
             </tr>
           ))}

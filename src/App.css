@@ -13,7 +13,8 @@
   --ironclad:     #d45c5c;
   --silent:       #4db87a;
   --defect:       #5c95d4;
-  --watcher:      #a05cd4;
+  --regent:       #d4a827;
+  --necrobinder:  #a05cd4;
   --win:          #4db87a;
   --loss:         #d45c5c;
 }
@@ -105,11 +106,12 @@ body {
   background: var(--bg-hover);
 }
 
-.char-tab.active          { border-color: var(--gold);     color: var(--gold-hi);  background: var(--bg-hover); }
-.char-tab.ironclad.active { border-color: var(--ironclad); color: var(--ironclad); }
-.char-tab.silent.active   { border-color: var(--silent);   color: var(--silent);   }
-.char-tab.defect.active   { border-color: var(--defect);   color: var(--defect);   }
-.char-tab.watcher.active  { border-color: var(--watcher);  color: var(--watcher);  }
+.char-tab.active             { border-color: var(--gold);        color: var(--gold-hi);     background: var(--bg-hover); }
+.char-tab.ironclad.active    { border-color: var(--ironclad);    color: var(--ironclad);    }
+.char-tab.silent.active      { border-color: var(--silent);      color: var(--silent);      }
+.char-tab.defect.active      { border-color: var(--defect);      color: var(--defect);      }
+.char-tab.regent.active      { border-color: var(--regent);      color: var(--regent);      }
+.char-tab.necrobinder.active { border-color: var(--necrobinder); color: var(--necrobinder); }
 
 /* ── Main ──────────────────────────────────────────── */
 .main-content {
@@ -291,6 +293,18 @@ body {
 
 .run-table tr.run-win td:first-child  { border-left: 2px solid var(--win);  }
 .run-table tr.run-loss td:first-child { border-left: 2px solid var(--loss); }
+
+.killed-by { font-size: 0.88rem; max-width: 180px; }
+
+.mp-badge {
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  padding: 2px 8px;
+  border: 1px solid var(--border-hi);
+  border-radius: 2px;
+  color: var(--text-dim);
+  cursor: default;
+}
 
 .result-badge {
   font-family: 'Cinzel', serif;
