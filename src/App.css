@@ -1,0 +1,329 @@
+/* ── Variables ─────────────────────────────────────── */
+:root {
+  --bg:           #080812;
+  --bg-card:      #111125;
+  --bg-hover:     #191932;
+  --border:       #23234a;
+  --border-hi:    #3a3a70;
+  --text:         #e2d9c2;
+  --text-dim:     #8888aa;
+  --text-faint:   #44445a;
+  --gold:         #c9a227;
+  --gold-hi:      #e8bc40;
+  --ironclad:     #d45c5c;
+  --silent:       #4db87a;
+  --defect:       #5c95d4;
+  --watcher:      #a05cd4;
+  --win:          #4db87a;
+  --loss:         #d45c5c;
+}
+
+/* ── Reset & Base ──────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(ellipse at 15% 60%, rgba(20, 20, 70, 0.45) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 15%, rgba(50, 20, 70, 0.3)  0%, transparent 50%),
+    repeating-linear-gradient(rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 48px),
+    repeating-linear-gradient(90deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 48px);
+  color: var(--text);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 16px;
+  min-height: 100vh;
+}
+
+/* ── Layout ────────────────────────────────────────── */
+.app {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px 40px;
+}
+
+/* ── Header ────────────────────────────────────────── */
+.app-header {
+  text-align: center;
+  padding: 48px 0 0;
+}
+
+.app-title {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  color: var(--gold-hi);
+  letter-spacing: 0.35em;
+  text-shadow: 0 0 40px rgba(201,162,39,0.35), 0 0 80px rgba(201,162,39,0.15);
+}
+
+.title-deco {
+  font-size: 0.65em;
+  margin: 0 20px;
+  opacity: 0.7;
+  vertical-align: middle;
+}
+
+.app-subtitle {
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.25em;
+  color: var(--text-dim);
+  margin-top: 10px;
+}
+
+.header-rule {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  margin: 28px 0 0;
+  opacity: 0.6;
+}
+
+/* ── Nav tabs ──────────────────────────────────────── */
+.char-nav {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 28px 0 20px;
+}
+
+.char-tab {
+  font-family: 'Cinzel', serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.18em;
+  padding: 9px 26px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.18s ease;
+  clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
+}
+
+.char-tab:hover {
+  border-color: var(--border-hi);
+  color: var(--text);
+  background: var(--bg-hover);
+}
+
+.char-tab.active          { border-color: var(--gold);     color: var(--gold-hi);  background: var(--bg-hover); }
+.char-tab.ironclad.active { border-color: var(--ironclad); color: var(--ironclad); }
+.char-tab.silent.active   { border-color: var(--silent);   color: var(--silent);   }
+.char-tab.defect.active   { border-color: var(--defect);   color: var(--defect);   }
+.char-tab.watcher.active  { border-color: var(--watcher);  color: var(--watcher);  }
+
+/* ── Main ──────────────────────────────────────────── */
+.main-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ── Stat Cards ────────────────────────────────────── */
+.stat-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 16px;
+}
+
+.stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 28px 20px 22px;
+  text-align: center;
+  position: relative;
+  transition: border-color 0.18s;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0.6;
+}
+
+.stat-card:hover { border-color: var(--border-hi); }
+
+.stat-value {
+  display: block;
+  font-family: 'Cinzel', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--gold-hi);
+  line-height: 1;
+  text-shadow: 0 0 20px rgba(201,162,39,0.25);
+}
+
+.stat-label {
+  display: block;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  margin-top: 8px;
+}
+
+/* ── Charts ────────────────────────────────────────── */
+.charts-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.chart-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 24px;
+}
+
+.chart-card-full { /* already in column flow, no extra needed */ }
+
+.section-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.18em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.section-sub {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  color: var(--text-faint);
+  text-transform: none;
+}
+
+/* ── Recharts shared tooltip ───────────────────────── */
+.chart-tooltip {
+  background: var(--bg-card);
+  border: 1px solid var(--border-hi);
+  padding: 12px 16px;
+  font-family: 'Rajdhani', sans-serif;
+  min-width: 140px;
+}
+
+.tooltip-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  margin-bottom: 6px;
+}
+
+.tooltip-row {
+  font-size: 0.95rem;
+  color: var(--text);
+}
+
+.tooltip-row strong {
+  color: var(--gold-hi);
+}
+
+.tooltip-sub {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  margin-top: 3px;
+}
+
+/* ── Boss legend ───────────────────────────────────── */
+.boss-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 32px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  justify-content: center;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* ── Run table ─────────────────────────────────────── */
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.run-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.run-table th {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  padding: 8px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.run-table td {
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.12s;
+  color: var(--text);
+}
+
+.run-table td.muted { color: var(--text-dim); }
+
+.run-table tr:hover td { background: rgba(255,255,255,0.025); }
+
+.run-table tr.run-win td:first-child  { border-left: 2px solid var(--win);  }
+.run-table tr.run-loss td:first-child { border-left: 2px solid var(--loss); }
+
+.result-badge {
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  padding: 3px 10px;
+  border-radius: 2px;
+  white-space: nowrap;
+}
+
+.badge-win  { background: rgba(77,184,122,0.12); color: var(--win);  border: 1px solid rgba(77,184,122,0.4);  }
+.badge-loss { background: rgba(212,92,92,0.12);  color: var(--loss); border: 1px solid rgba(212,92,92,0.4);  }
+
+.empty-state {
+  text-align: center;
+  color: var(--text-faint);
+  padding: 32px;
+  font-style: italic;
+}
+
+/* ── Footer ────────────────────────────────────────── */
+.app-footer {
+  text-align: center;
+  padding: 28px 0 0;
+  border-top: 1px solid var(--border);
+  color: var(--text-faint);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  margin-top: 8px;
+}
+
+/* ── Responsive ────────────────────────────────────── */
+@media (max-width: 760px) {
+  .charts-row { grid-template-columns: 1fr; }
+  .app-title  { letter-spacing: 0.2em; }
+}
