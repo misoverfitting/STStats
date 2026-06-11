@@ -726,6 +726,119 @@ body {
   color: var(--text);
 }
 
+/* ── Ascension Filter ──────────────────────────────── */
+.asc-filter-wrap {
+  position: relative;
+}
+
+.asc-filter-btn {
+  min-width: 96px;
+}
+
+.asc-filter-btn.active {
+  border-color: var(--gold);
+  color: var(--gold-hi);
+}
+
+.asc-filter-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.asc-popup {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 200;
+  background: var(--bg-card);
+  border: 1px solid var(--border-hi);
+  padding: 14px;
+  min-width: 220px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+}
+
+.asc-popup-header {
+  font-family: 'Cinzel', serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin-bottom: 10px;
+}
+
+.asc-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 8px 6px;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  cursor: pointer;
+  text-align: left;
+  transition: color 0.13s;
+  border-radius: 2px;
+}
+
+.asc-option:hover { color: var(--text); background: var(--bg-hover); }
+.asc-option.selected { color: var(--gold-hi); }
+
+.asc-check {
+  display: inline-block;
+  width: 14px;
+  font-size: 0.75rem;
+  color: var(--gold-hi);
+}
+
+.asc-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 8px 0;
+}
+
+.asc-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+.asc-pill {
+  font-family: 'Cinzel', serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  padding: 5px 10px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.13s;
+  border-radius: 2px;
+}
+
+.asc-pill:hover  { border-color: var(--border-hi); color: var(--text); }
+.asc-pill.selected { border-color: var(--gold); color: var(--gold-hi); background: var(--bg-hover); }
+
+.asc-clear-btn {
+  width: 100%;
+  padding: 7px;
+  margin-top: 4px;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-faint);
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.13s;
+}
+
+.asc-clear-btn:hover { border-color: var(--loss); color: var(--loss); }
+
 /* ── Footer ────────────────────────────────────────── */
 .app-footer {
   text-align: center;

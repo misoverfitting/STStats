@@ -5,6 +5,7 @@ const SORT_OPTIONS = [
   { id: 'pickRate',    label: 'Pick Rate'    },
   { id: 'offered',    label: 'Most Offered' },
   { id: 'pickRateAsc', label: 'Most Skipped' },
+  { id: 'winRate',    label: 'Win %'        },
 ];
 
 const SOURCE_OPTIONS = [
@@ -69,12 +70,16 @@ export default function CardPicks({ cards, selectedChar }) {
       const rb = pickRateForSource(b, source).rate;
       if (sort === 'offered')     return pickRateForSource(b, source).offered - pickRateForSource(a, source).offered;
       if (sort === 'pickRateAsc') return ra - rb;
+      if (sort === 'winRate') {
+        const wa = a.winPickRate ?? -1;
+        const wb = b.winPickRate ?? -1;
+        return wb - wa;
+      }
       return rb - ra;
     });
   }, [cards, selectedChar, source, sort, type]);
 
   const shown = filtered.slice(0, limit);
-
   const typeOptions = ['all', ...TYPE_ORDER];
 
   return (
@@ -129,6 +134,7 @@ export default function CardPicks({ cards, selectedChar }) {
               <th style={{ width: 60 }}>Picked</th>
               <th style={{ width: 80 }}>Pick %</th>
               <th style={{ minWidth: 120 }}>Pick Rate</th>
+              <th style={{ width: 75 }}>Win %</th>
               {source === 'all' && <th style={{ width: 80 }}>Reward</th>}
               {source === 'all' && <th style={{ width: 80 }}>Shop</th>}
             </tr>
@@ -143,6 +149,13 @@ export default function CardPicks({ cards, selectedChar }) {
                           : rate >= 40 ? 'var(--gold)'
                           : 'var(--loss)';
               const cardType = CARD_TYPES[card.id] ?? 'unknown';
+
+              const wr = card.winPickRate;
+              const wrColor = wr == null  ? 'var(--text-faint)'
+                            : wr >= 50    ? 'var(--win)'
+                            : wr >= 30    ? 'var(--gold)'
+                            : 'var(--loss)';
+
               return (
                 <tr key={card.id}>
                   <td style={{ fontFamily: 'Cinzel, serif', fontSize: '0.82rem' }}>
@@ -153,6 +166,9 @@ export default function CardPicks({ cards, selectedChar }) {
                   <td className="muted">{picked}</td>
                   <td style={{ color, fontWeight: 600 }}>{rate}%</td>
                   <td><MiniBar rate={rate} color={color} /></td>
+                  <td style={{ color: wrColor, fontWeight: 600 }}>
+                    {wr != null ? `${wr}%` : '—'}
+                  </td>
                   {source === 'all' && (
                     <td className="muted">
                       {card.rewardOffered > 0
