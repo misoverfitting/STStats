@@ -18,6 +18,7 @@ import CardPicks from './components/CardPicks';
 import CollapsibleSection from './components/CollapsibleSection';
 import UploadPanel from './components/UploadPanel';
 import AscensionFilter from './components/AscensionFilter';
+import MpFilterModal from './components/MpFilterModal';
 
 const DEMO_DATA = {
   overview:        demoOverview,
@@ -48,6 +49,8 @@ export default function App() {
   const [isDemo,             setIsDemo]             = useState(false);
   const [selected,           setSelected]           = useState('all');
   const [selectedAscensions, setSelectedAscensions] = useState(null);
+  const [mpFilter,           setMpFilter]           = useState('all');
+  const [showMpModal,        setShowMpModal]        = useState(false);
 
   // Restore session data on first load
   useEffect(() => {
@@ -72,10 +75,18 @@ export default function App() {
     return [...new Set(rawRuns.map(r => r.ascension))].sort((a, b) => a - b);
   }, [rawRuns]);
 
+  const mpFilteredRuns = useMemo(() => {
+    if (!rawRuns) return null;
+    if (mpFilter === 'all') return rawRuns;
+    const wantMp = mpFilter === 'multiplayer';
+    return rawRuns.filter(r => r.multiplayer === wantMp);
+  }, [rawRuns, mpFilter]);
+
   const filteredData = useMemo(() => {
-    if (!rawRuns || !selectedAscensions) return null;
-    return computeFilteredStats(rawRuns, selectedAscensions);
-  }, [rawRuns, selectedAscensions]);
+    if (!mpFilteredRuns) return null;
+    if (!selectedAscensions && mpFilter === 'all') return null;
+    return computeFilteredStats(mpFilteredRuns, selectedAscensions);
+  }, [mpFilteredRuns, selectedAscensions, mpFilter]);
   // ─────────────────────────────────────────────────────────────────────
 
   function handleUserData(stats) {
@@ -95,6 +106,7 @@ export default function App() {
     setPage('upload');
     setSelected('all');
     setSelectedAscensions(null);
+    setMpFilter('all');
   }
 
   if (page === 'upload') {
@@ -150,9 +162,24 @@ export default function App() {
 
   const ascActive = !!selectedAscensions;
 
+  const mpActive = mpFilter !== 'all';
+  const mpLabel  = mpFilter === 'singleplayer' ? 'Solo' : mpFilter === 'multiplayer' ? 'Co-op' : 'Mode';
+
   return (
     <div className="app">
+      {showMpModal && (
+        <MpFilterModal
+          value={mpFilter}
+          onChange={setMpFilter}
+          onClose={() => setShowMpModal(false)}
+        />
+      )}
       <header className="app-header">
+        <div className="header-topright">
+          <button className="header-change-btn" onClick={handleChangeData}>
+            Change data
+          </button>
+        </div>
         <h1 className="app-title">
           <span className="title-deco">✦</span>STStats<span className="title-deco">✦</span>
         </h1>
@@ -167,8 +194,11 @@ export default function App() {
             onChange={setSelectedAscensions}
             disabled={!rawRuns}
           />
-          <button className="header-change-btn" onClick={handleChangeData}>
-            Change data
+          <button
+            className={`header-change-btn${mpActive ? ' active' : ''}`}
+            onClick={() => setShowMpModal(true)}
+          >
+            {mpLabel}
           </button>
         </div>
         <div className="header-rule" />
