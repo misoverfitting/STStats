@@ -27,11 +27,11 @@ export default function RunTable({ runs }) {
             <th>Result</th>
             <th>Character</th>
             <th>Asc</th>
-            <th>Act Reached</th>
-            <th>Killed By</th>
-            <th>Time</th>
+            <th>Act</th>
+            <th className="col-hide-mobile">Killed By</th>
+            <th className="col-hide-mobile">Time</th>
             <th>Mode</th>
-            <th>Date</th>
+            <th className="col-hide-mobile">Date</th>
           </tr>
         </thead>
         <tbody>
@@ -39,7 +39,7 @@ export default function RunTable({ runs }) {
             <tr key={run.id} className={run.won ? 'run-win' : 'run-loss'}>
               <td>
                 <span className={`result-badge ${run.won ? 'badge-win' : 'badge-loss'}`}>
-                  {run.won ? 'VICTORY' : 'DEFEAT'}
+                  {run.won ? 'WIN' : 'LOSS'}
                 </span>
               </td>
               <td style={{ color: CHAR_COLORS[run.character] }}>
@@ -49,16 +49,16 @@ export default function RunTable({ runs }) {
               <td style={{ color: run.won ? 'var(--win)' : 'var(--text)' }}>
                 {run.actReached}
               </td>
-              <td className="muted killed-by">
+              <td className="muted killed-by col-hide-mobile">
                 {run.killedBy || '—'}
               </td>
-              <td className="muted">{run.runTime}</td>
+              <td className="muted col-hide-mobile">{run.runTime}</td>
               <td className="muted">
                 {run.multiplayer ? (
-                  <span title={`With: ${run.allies.join(', ')}`} className="mp-badge">Co-op</span>
+                  <span title={run.allies.length ? `With: ${run.allies.join(', ')}` : 'Co-op'} className="mp-badge">Co-op</span>
                 ) : 'Solo'}
               </td>
-              <td className="muted">{run.date}</td>
+              <td className="muted col-hide-mobile">{run.date}</td>
             </tr>
           ))}
         </tbody>

@@ -34,11 +34,11 @@ const SESSION_KEY = 'ststats_userdata';
 
 const TABS = [
   { id: 'all',         label: 'All'         },
+  { id: 'ironclad',    label: 'Ironclad'    },
   { id: 'silent',      label: 'Silent'      },
+  { id: 'regent',      label: 'Regent'      },
   { id: 'necrobinder', label: 'Necrobinder' },
   { id: 'defect',      label: 'Defect'      },
-  { id: 'ironclad',    label: 'Ironclad'    },
-  { id: 'regent',      label: 'Regent'      },
 ];
 
 const streakLabel = (n, type) => type === 'win' ? `${n}W` : `${n}L`;

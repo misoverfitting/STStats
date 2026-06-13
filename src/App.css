@@ -990,98 +990,168 @@ body {
   letter-spacing: 0.04em;
 }
 
-/* ── Responsive ────────────────────────────────────── */
+/* ── Responsive — tablet ───────────────────────────── */
 @media (max-width: 760px) {
-  .charts-row-inner { grid-template-columns: 1fr; }
+  .charts-row-inner {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
 
+/* ── Responsive — phone ────────────────────────────── */
+@media (max-width: 540px) {
   .app {
-    padding: 0 12px 32px;
+    padding: 0 14px 32px;
   }
 
+  /* Header */
   .app-header {
-    padding-top: 36px;
+    padding-top: 44px;
   }
 
   .header-topright {
     top: 10px;
   }
 
-  .header-source-row {
-    gap: 8px 12px;
+  .app-title {
+    font-size: clamp(1.6rem, 9vw, 2.4rem);
+    letter-spacing: 0.15em;
   }
 
+  .title-deco {
+    margin: 0 10px;
+    font-size: 0.6em;
+  }
+
+  .app-subtitle {
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+  }
+
+  .header-rule {
+    margin: 20px 0 0;
+  }
+
+  .header-source-row {
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .header-source-label {
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+  }
+
+  .header-change-btn {
+    font-size: 0.6rem;
+    padding: 5px 10px;
+    letter-spacing: 0.1em;
+    min-height: 30px;
+  }
+
+  /* Character nav — 3-column grid */
   .char-nav {
-    padding: 20px 0 16px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     gap: 6px;
+    padding: 16px 0 14px;
   }
 
   .char-tab {
-    font-size: 0.72rem;
-    padding: 8px 16px;
+    font-size: 0.65rem;
+    padding: 10px 4px;
+    letter-spacing: 0.08em;
+    clip-path: none;
+    border-radius: 2px;
+    text-align: center;
+    width: 100%;
   }
 
+  /* Stat cards */
+  .stat-cards {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .stat-card {
+    padding: 18px 10px 14px;
+  }
+
+  .stat-value {
+    font-size: 1.5rem;
+  }
+
+  .stat-label {
+    font-size: 0.64rem;
+  }
+
+  /* Collapsible sections */
   .section-toggle {
-    padding: 16px 16px 12px;
+    padding: 14px 14px 12px;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
   }
 
   .section-body {
-    padding: 16px;
+    padding: 14px;
   }
 
-  .charts-row-inner {
-    gap: 16px;
+  /* Run table: hide low-priority columns */
+  .col-hide-mobile {
+    display: none;
   }
 
+  .run-table th,
+  .run-table td {
+    padding: 9px 10px;
+    font-size: 0.82rem;
+  }
+
+  .result-badge {
+    font-size: 0.6rem;
+    padding: 3px 7px;
+  }
+
+  /* Card picks */
   .card-picks-controls {
     flex-direction: column;
     align-items: flex-start;
-    gap: 10px;
+    gap: 8px;
+  }
+
+  .picks-control-group {
+    flex-wrap: wrap;
   }
 
   .picks-count {
     margin-left: 0;
   }
 
-  .stat-cards {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-  }
-
-  .stat-value {
-    font-size: 1.6rem;
-  }
-
-  .upload-card {
-    padding: 28px 20px 24px;
-  }
-}
-
-@media (max-width: 480px) {
-  .app-title {
-    letter-spacing: 0.12em;
-  }
-
-  .title-deco {
-    margin: 0 10px;
-  }
-
-  .header-change-btn {
-    font-size: 0.62rem;
+  .picks-pill {
+    font-size: 0.76rem;
     padding: 5px 10px;
   }
 
-  .run-table th,
-  .run-table td {
-    padding: 8px 10px;
-    font-size: 0.82rem;
+  /* Hide pick-rate minibar column on mobile */
+  .card-picks-table th:nth-child(6),
+  .card-picks-table td:nth-child(6) {
+    display: none;
   }
 
-  .stat-card {
-    padding: 20px 12px 16px;
-  }
-
+  /* Ascension popup: open left-aligned so it doesn't clip */
   .asc-popup {
     right: auto;
     left: 0;
+  }
+
+  /* Upload page */
+  .upload-card {
+    padding: 24px 16px 20px;
+  }
+
+  .upload-btn,
+  .upload-demo-btn {
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
   }
 }
